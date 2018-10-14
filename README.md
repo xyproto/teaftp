@@ -26,6 +26,11 @@ Or as root or with the correct Linux capabilities:
 
 MIT
 
+### Uses
+
+* [pin/tftp](https://github.com/pin/tftp)
+* [sirupsen/logrus](https://github.com/sirupsen/logrus)
+
 ### Version
 
 1.0.0
