@@ -2,6 +2,8 @@
 
 Simple, read-only TFTP server.
 
+![teaftp](img/teaftp.gif)
+
 ### Requirements
 
     Go >= 1.11
