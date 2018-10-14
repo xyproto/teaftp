@@ -4,6 +4,11 @@ Simple, read-only TFTP server.
 
 ![teaftp](img/teaftp.gif)
 
+* Will happily share ANY file on the system, but does not have acccess to write to any file.
+* This may be suitable when dealing with hardware devices that read files over TFTP at boot.
+* This is not suitable for running an online server.
+* Every access is logged.
+
 ### Requirements
 
     Go >= 1.11
