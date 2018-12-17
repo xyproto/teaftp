@@ -5,9 +5,9 @@ Simple, read-only TFTP server.
 ![teaftp](img/teaftp.gif)
 
 * Will happily share ANY file on the system, but does not have acccess to write to any file.
-* This may be suitable when dealing with hardware devices that read files over TFTP at boot.
-* This is not suitable for running an online server.
-* Every access is logged.
+  * Use the provided Docker container for a way to serve only a limited selection of files.
+* TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot.
+* Every access is logged to stdout.
 
 ### Requirements
 
@@ -19,6 +19,8 @@ Simple, read-only TFTP server.
 
 ### Running
 
+#### Directly
+
 In the directory where you wish to share files:
 
 Either:
@@ -28,6 +30,19 @@ Either:
 Or as root or with the correct Linux capabilities:
 
     ./teaftp
+
+#### Through Docker
+
+Make sure `dockerd` is running, then:
+
+    git clone https://github.com/xyproto/teaftp
+    cd teaftp/docker
+    ./build_teaftp.sh
+    ./run_teaftp.sh ./
+
+The files in `./` can then be accessed with ie. `curl`, or another TFTP client:
+
+    curl tftp://localhost/srv/example.txt
 
 ### License
 
