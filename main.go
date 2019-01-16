@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const versionString = "TeaFTP 1.1"
+const versionString = "TeaFTP 1.1.1"
 
 // whitelist of allowed filename string suffixes. Put to use if not empty.
 var suffixWhitelist []string
