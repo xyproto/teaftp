@@ -31,6 +31,16 @@ Or as root or with the correct Linux capabilities:
 
     ./teaftp
 
+#### Whitelist
+
+Any arguments given to TeaFTP are added to the whitelist of allowed filename suffixes. If no arguments are given, the whitelist is not in use.
+
+Example:
+
+    sudo ./teaftp ".txt"
+
+This only serves filenames ending with `.txt`.
+
 #### Through Docker
 
 Make sure `dockerd` is running, then:
@@ -55,4 +65,4 @@ MIT
 
 ### Version
 
-1.0.0
+1.1.0

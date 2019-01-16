@@ -6,13 +6,18 @@ import (
 	"github.com/sirupsen/logrus"
 	"io"
 	"os"
+	"strings"
 	"time"
 )
 
-const versionString = "TeaFTP 1.0"
+const versionString = "TeaFTP 1.1"
+
+// whitelist of allowed filename string suffixes. Put to use if not empty.
+var suffixWhitelist []string
 
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
+
 	remoteAddr := ""
 	if raddr, ok := rf.(tftp.OutgoingTransfer); ok {
 		r := raddr.RemoteAddr()
@@ -22,6 +27,27 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 	if laddr, ok := rf.(tftp.RequestPacketInfo); ok {
 		localAddr = laddr.LocalIP().String()
 	}
+
+	// If the suffixWhitelist is empty, allow this request by default
+	allowed := len(suffixWhitelist) == 0
+
+	// If the suffixWhitelist is not empty, check if the filename has a valid suffix
+	for _, suffix := range suffixWhitelist {
+		if strings.HasSuffix(filename, suffix) {
+			allowed = true
+			break
+		}
+	}
+
+	// Check if the read request is allowed, or not
+	if !allowed {
+		if remoteAddr != "" && localAddr != "" {
+			logrus.Errorf("DENIED Read request of %s from %s to %s: suffix not whitelisted", filename, remoteAddr, localAddr)
+		}
+		return fmt.Errorf("%s does not have a whitelisted suffix (and the whitelist is not empty)", filename)
+	}
+
+	// Log the request
 	if remoteAddr != "" && localAddr != "" {
 		logrus.Infof("Read request from %s to %s", remoteAddr, localAddr)
 	}
@@ -93,9 +119,30 @@ func genWriteHandler(readOnly bool) func(string, io.WriterTo) error {
 }
 
 func main() {
-	fmt.Println(versionString + "\nSimple, read-only TFTP server")
 	// Is the server read-only?
 	readOnly := true
+
+	// Whitelist of allowed filename suffixes
+	if len(os.Args) > 1 {
+		if os.Args[1] == "--help" {
+			fmt.Println(versionString + `
+
+Any given arguments that are not flags are interpreted as filename suffixes
+that are added to the filename suffix whitelist. Example, for serving only
+filenames ending with .txt:
+
+teaftp ".txt"
+`)
+			os.Exit(0)
+		} else if os.Args[1] == "--write" { // Undocumented feature
+			logrus.Infoln("Enabled write mode")
+			readOnly = false
+		}
+		suffixWhitelist = os.Args[1:]
+	}
+
+	fmt.Println(versionString + "\nSimple, read-only TFTP server")
+
 	// use nil in place of handler to disable read or write operations
 	s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
 	s.SetTimeout(5 * time.Second)  // optional
