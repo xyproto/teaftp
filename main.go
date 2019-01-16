@@ -42,14 +42,14 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 	// Check if the read request is allowed, or not
 	if !allowed {
 		if remoteAddr != "" && localAddr != "" {
-			logrus.Errorf("DENIED Read request of %s from %s to %s: suffix not whitelisted", filename, remoteAddr, localAddr)
+			logrus.Errorf("[DENIED] Read request of %s from %s to %s: suffix not whitelisted", filename, remoteAddr, localAddr)
 		}
 		return fmt.Errorf("%s does not have a whitelisted suffix (and the whitelist is not empty)", filename)
 	}
 
 	// Log the request
 	if remoteAddr != "" && localAddr != "" {
-		logrus.Infof("Read request from %s to %s", remoteAddr, localAddr)
+		logrus.Infof("Read request of %s from %s to %s", filename, remoteAddr, localAddr)
 	}
 
 	file, err := os.Open(filename)
@@ -92,9 +92,8 @@ func genWriteHandler(readOnly bool) func(string, io.WriterTo) error {
 			localAddr = laddr.LocalIP().String()
 		}
 		if remoteAddr != "" && localAddr != "" {
-			logrus.Infof("Write request from %s to %s", remoteAddr, localAddr)
+			logrus.Infof("Write request of %s from %s to %s", filename, remoteAddr, localAddr)
 		}
-
 		if readOnly {
 			logrus.Warnf("Client wants to upload %s, but server is read-only", filename)
 			filename = os.DevNull
