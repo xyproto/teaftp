@@ -6,6 +6,7 @@ Simple, read-only TFTP server.
 
 * Will happily share ANY file on the system, but does not have acccess to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
+  * Or use the whitelist feature, as described below.
 * TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot.
 * Every access is logged to stdout.
 
