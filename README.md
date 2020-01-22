@@ -1,4 +1,4 @@
-# TeaFTP [![Build Status](https://travis-ci.org/xyproto/teaftp.svg?branch=master)](https://travis-ci.org/xyproto/teaftp)
+# TeaFTP [![Build Status](https://travis-ci.com/xyproto/teaftp.svg?branch=master)](https://travis-ci.com/xyproto/teaftp)
 
 Simple, read-only TFTP server.
 
