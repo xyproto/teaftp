@@ -6,7 +6,7 @@ Simple, read-only TFTP server.
 
 * Will happily share ANY file on the system, but does not have acccess to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
-  * Or use the whitelist feature, as described below.
+  * Or use the list of allowed prefixes or suffixes, as described below.
 * TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot.
 * Every access is logged to stdout.
 
@@ -32,9 +32,9 @@ Or as root or with the correct Linux capabilities:
 
     ./teaftp
 
-#### Whitelist
+#### Allowed suffixes
 
-Any arguments given to TeaFTP are added to the whitelist of allowed filename suffixes. If no arguments are given, the whitelist is not in use.
+Any arguments given to TeaFTP are added to the list of allowed filename suffixes. If no arguments are given, the list of allowed suffixes is not in use.
 
 Example:
 
