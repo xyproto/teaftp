@@ -2,18 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/pin/tftp"
-	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/pin/tftp"
+	"github.com/sirupsen/logrus"
 )
 
 const versionString = "TeaFTP 1.1.1"
 
-// whitelist of allowed filename string suffixes. Put to use if not empty.
-var suffixWhitelist []string
+var (
+	// allowed filename string prefixes or suffixes. Non-empty slices are put to use.
+	allowedPrefixes []string
+	allowedSuffixes []string
+)
 
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
@@ -28,23 +32,39 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 		localAddr = laddr.LocalIP().String()
 	}
 
-	// If the suffixWhitelist is empty, allow this request by default
-	allowed := len(suffixWhitelist) == 0
+	allowed := true
 
-	// If the suffixWhitelist is not empty, check if the filename has a valid suffix
-	for _, suffix := range suffixWhitelist {
-		if strings.HasSuffix(filename, suffix) {
-			allowed = true
-			break
+	// If the allowedPrefixes slice is not empty, check if the filename has a valid suffix
+	if len(allowedPrefixes) > 0 {
+		allowed = false
+		for _, prefix := range allowedPrefixes {
+			if strings.HasPrefix(filename, prefix) {
+				allowed = true
+				break
+			}
+		}
+
+	}
+
+	// If the allowedSuffixes slice is not empty, check if the filename has a valid suffix
+	if len(allowedSuffixes) > 0 {
+		allowed = false
+		for _, suffix := range allowedSuffixes {
+			if strings.HasSuffix(filename, suffix) {
+				allowed = true
+				break
+			}
 		}
 	}
+
+	// if the allowedPrefixes slice is not empty, check if the filename has a valid prefix
 
 	// Check if the read request is allowed, or not
 	if !allowed {
 		if remoteAddr != "" && localAddr != "" {
-			logrus.Errorf("[DENIED] Read request of %s from %s to %s: suffix not whitelisted", filename, remoteAddr, localAddr)
+			logrus.Errorf("[DENIED] Read request of %s from %s to %s: prefix or suffix not allowed", filename, remoteAddr, localAddr)
 		}
-		return fmt.Errorf("%s does not have a whitelisted suffix (and the whitelist is not empty)", filename)
+		return fmt.Errorf("%s does not have an allowed prefix or suffix", filename)
 	}
 
 	// Log the request
@@ -121,14 +141,16 @@ func main() {
 	// Is the server read-only?
 	readOnly := true
 
-	// Whitelist of allowed filename suffixes
+	// TODO: Use a proper command line argument handler
+
+	//  Handle allowed filename suffixes
 	if len(os.Args) > 1 {
 		if os.Args[1] == "--help" {
 			fmt.Println(versionString + `
 
 Any given arguments that are not flags are interpreted as filename suffixes
-that are added to the filename suffix whitelist. Example, for serving only
-filenames ending with .txt:
+that are added to the list of allowed filename suffixe.
+Example, for serving only filenames ending with .txt:
 
 teaftp ".txt"
 `)
@@ -137,7 +159,8 @@ teaftp ".txt"
 			logrus.Infoln("Enabled write mode")
 			readOnly = false
 		}
-		suffixWhitelist = os.Args[1:]
+		allowedSuffixes = os.Args[1:]
+		//allowedPrefixes = os.Args[1:]
 	}
 
 	fmt.Println(versionString + "\nSimple, read-only TFTP server")
