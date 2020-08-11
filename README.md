@@ -2,8 +2,6 @@
 
 Simple, read-only TFTP server.
 
-![teaftp](img/teaftp.gif)
-
 * Will happily share ANY file on the system, but does not have acccess to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
   * Or use the list of allowed prefixes or suffixes, as described below.
