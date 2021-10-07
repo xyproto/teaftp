@@ -9,9 +9,10 @@ import (
 
 	"github.com/pin/tftp"
 	"github.com/sirupsen/logrus"
+	"github.com/xyproto/env"
 )
 
-const versionString = "TeaFTP 1.1.1"
+const versionString = "TeaFTP 1.1.2"
 
 var (
 	// allowed filename string prefixes or suffixes. Non-empty slices are put to use.
@@ -168,7 +169,7 @@ teaftp ".txt"
 	// use nil in place of handler to disable read or write operations
 	s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
 	s.SetTimeout(5 * time.Second)  // optional
-	err := s.ListenAndServe(":69") // blocks until s.Shutdown() is called
+	err := s.ListenAndServe(":" + env.Str("PORT", "69")) // blocks until s.Shutdown() is called
 	if err != nil {
 		logrus.Errorf("server: %s", err)
 		os.Exit(1)
