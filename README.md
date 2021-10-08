@@ -1,4 +1,6 @@
-# ![TeaFTP](img/teaftp.png =128x128) TeaFTP
+<img src="img/teaftp.svg" width="128">
+
+# TeaFTP
 
 ![Build](https://github.com/xyproto/teaftp/workflows/Build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/teaftp)](https://goreportcard.com/report/github.com/xyproto/teaftp) [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/teaftp/main/LICENSE)
 
