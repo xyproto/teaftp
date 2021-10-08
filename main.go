@@ -12,7 +12,7 @@ import (
 	"github.com/xyproto/env"
 )
 
-const versionString = "TeaFTP 1.1.2"
+const versionString = "TeaFTP 2.0.0"
 
 var (
 	// allowed filename string prefixes or suffixes. Non-empty slices are put to use.
