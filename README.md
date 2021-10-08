@@ -28,15 +28,18 @@ Simple, read-only TFTP server.
 
 In the directory where you wish to share files:
 
-Either:
+Either (if you use sudo):
 
     sudo ./teaftp
 
-Or as with the correct Linux capabilities:
+Or (on Linux), install it to /usr/bin and give the executable additional capabilities with `setcap`:
 
     sudo install -Dm755 teaftp /usr/bin/teaftp
     sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
-    /usr/bin/teaftp
+
+Then run it:
+    
+    teaftp
 
 #### Docker
 
