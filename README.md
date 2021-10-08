@@ -2,7 +2,7 @@
 
 Simple, read-only TFTP server.
 
-* Will happily share ANY file on the system, but does not have acccess to write to any file.
+* Will happily share ANY file on the system, but does not have access to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
   * Or use the list of allowed prefixes or suffixes, as described below.
 * TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot.
@@ -29,6 +29,10 @@ Either:
 Or as root or with the correct Linux capabilities:
 
     ./teaftp
+
+Here is one way of letting TeaFTP listen to the TFTP port without running as root, on Linux:
+
+    sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
 
 #### Allowed suffixes
 
