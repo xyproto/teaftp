@@ -168,7 +168,7 @@ teaftp ".txt"
 
 	// use nil in place of handler to disable read or write operations
 	s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
-	s.SetTimeout(5 * time.Second)  // optional
+	s.SetTimeout(5 * time.Second)                        // optional
 	err := s.ListenAndServe(":" + env.Str("PORT", "69")) // blocks until s.Shutdown() is called
 	if err != nil {
 		logrus.Errorf("server: %s", err)
