@@ -2,6 +2,8 @@
 
 Simple, read-only TFTP server.
 
+### Features and limitations
+
 * Will happily share ANY file on the system, but does not have access to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
   * Or use the list of allowed prefixes or suffixes, as described below.
@@ -26,27 +28,25 @@ Either:
 
     sudo ./teaftp
 
-Or as root or with the correct Linux capabilities:
+Or as with the correct Linux capabilities:
 
-    ./teaftp
-
-Here is one way of letting TeaFTP listen to the TFTP port without running as root, on Linux:
-
+    sudo install -Dm755 teaftp /usr/bin/teaftp
     sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
+    /usr/bin/teaftp
 
 #### Docker
 
-To build the Docker container, and also copy in the contents of the "static" directory to /srv/tftp within the container:
+To build the Docker container, and also copy in the contents of the `static` directory to `/srv/tftp` within the container:
 
     docker build . -t teaftp
 
 To run TeaFTP with Docker:
 
-    docker run --network=host -ti teaftp
+    docker run --network=host -t teaftp
 
-To run TeaFTP with Docker and serve on port 9000:
+To run TeaFTP with Docker and serve on port 9000 instead of port 69:
 
-    docker run -ePORT=9000 --network=host -ti teaftp
+    docker run -ePORT=9000 --network=host -t teaftp
 
 #### Allowed suffixes
 
@@ -58,7 +58,7 @@ Example:
 
 This only serves filenames ending with `.txt`.
 
-### Uses
+### Dependencies
 
 * [pin/tftp](https://github.com/pin/tftp)
 * [sirupsen/logrus](https://github.com/sirupsen/logrus)
