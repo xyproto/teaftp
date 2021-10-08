@@ -12,9 +12,9 @@ Simple, read-only TFTP server.
 
     Go >= 1.11
 
-### Installation
+### Installation with Go >= 1.17
 
-    go get github.com/xyproto/teaftp
+    go install github.com/xyproto/teaftp@latest
 
 ### Running
 
@@ -34,6 +34,20 @@ Here is one way of letting TeaFTP listen to the TFTP port without running as roo
 
     sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
 
+#### Docker
+
+To build the Docker container, and also copy in the contents of the "static" directory to /srv/tftp within the container:
+
+    docker build . -t teaftp
+
+To run TeaFTP with Docker:
+
+    docker run --network=host -ti teaftp
+
+To run TeaFTP with Docker and serve on port 9000:
+
+    docker run -ePORT=9000 --network=host -ti teaftp
+
 #### Allowed suffixes
 
 Any arguments given to TeaFTP are added to the list of allowed filename suffixes. If no arguments are given, the list of allowed suffixes is not in use.
@@ -44,28 +58,13 @@ Example:
 
 This only serves filenames ending with `.txt`.
 
-#### Through Docker
-
-Make sure `dockerd` is running, then:
-
-    git clone https://github.com/xyproto/teaftp
-    cd teaftp/docker
-    ./build_teaftp.sh
-    ./run_teaftp.sh ./
-
-The files in `./` can then be accessed with ie. `curl`, or another TFTP client:
-
-    curl tftp://localhost/srv/example.txt
-
-### License
-
-MIT
-
 ### Uses
 
 * [pin/tftp](https://github.com/pin/tftp)
 * [sirupsen/logrus](https://github.com/sirupsen/logrus)
 
-### Version
+### General info
 
-1.1.1
+* Version: 2.0.0
+* License: BSD-3
+* Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
