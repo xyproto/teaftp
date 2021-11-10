@@ -18,7 +18,7 @@ Simple, read-only TFTP server.
 
     Go >= 1.11
 
-### Installation with Go >= 1.17
+### Installation with Go 1.17 or later
 
     go install github.com/xyproto/teaftp@latest
 
