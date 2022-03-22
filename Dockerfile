@@ -1,4 +1,4 @@
-FROM golang:1.17 as builder
+FROM golang:1.18 as builder
 LABEL maintainer="xyproto@archlinux.org"
 
 WORKDIR /app
@@ -9,9 +9,12 @@ RUN CGO_ENABLED=0 GOOS=linux go build -mod=vendor -ldflags "-s" -a -v
 FROM alpine:3
 RUN apk add --no-cache ca-certificates
 
+# Files
 COPY --from=builder /app/teaftp /usr/bin/teaftp
 
+# Directories
 COPY --from=builder /app/static /srv/tftp
+
 WORKDIR /srv/tftp
 
 ENV PORT 69
