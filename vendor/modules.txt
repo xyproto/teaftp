@@ -3,15 +3,15 @@ github.com/pin/tftp
 github.com/pin/tftp/netascii
 # github.com/sirupsen/logrus v1.8.1
 github.com/sirupsen/logrus
-# github.com/xyproto/env v1.1.0
+# github.com/xyproto/env v1.7.0
 github.com/xyproto/env
-# golang.org/x/net v0.0.0-20211007125505-59d4e928ea9d
+# golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 golang.org/x/net/bpf
 golang.org/x/net/internal/iana
 golang.org/x/net/internal/socket
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
-# golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac
+# golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
