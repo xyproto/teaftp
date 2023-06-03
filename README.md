@@ -8,10 +8,10 @@ Simple, read-only TFTP server.
 
 ### Features and limitations
 
-* Will happily share ANY file on the system, but does not have access to write to any file.
+* TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot (PXE).
+* Will happily read and share ANY file on the system, but does not have access to write to any file.
   * Use the provided Docker container for a way to serve only a limited selection of files.
   * Or use the list of allowed prefixes or suffixes, as described below.
-* TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot.
 * Every access is logged to stdout.
 
 ### Requirements
