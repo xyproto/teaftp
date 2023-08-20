@@ -9,13 +9,12 @@ import (
 
 	"github.com/pin/tftp"
 	"github.com/sirupsen/logrus"
-	"github.com/xyproto/env"
+	"github.com/urfave/cli/v2"
 )
 
 const versionString = "TeaFTP 1.3.0"
 
 var (
-	// allowed filename string prefixes or suffixes. Non-empty slices are put to use.
 	allowedPrefixes []string
 	allowedSuffixes []string
 )
@@ -139,39 +138,45 @@ func genWriteHandler(readOnly bool) func(string, io.WriterTo) error {
 }
 
 func main() {
-	// Is the server read-only?
-	readOnly := true
+	app := &cli.App{
+		Name:    "teaftp",
+		Version: versionString,
+		Usage:   "Simple, read-only TFTP server",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:   "write",
+				Usage:  "Enable write mode (undocumented feature)",
+				Hidden: true,
+			},
+			&cli.StringFlag{
+				Name:    "port",
+				Value:   "69",
+				Usage:   "Port number for the TFTP server",
+				EnvVars: []string{"PORT"}, // Backwards compatibility with original Docker example
+			},
+		},
+		ArgsUsage: "[allowed suffixes]",
+		Action: func(c *cli.Context) error {
+			readOnly := !c.Bool("write")
+			if c.Args().Present() {
+				allowedSuffixes = c.Args().Slice()
+			}
 
-	// TODO: Use a proper command line argument handler
+			// Your TFTP server setup and run code goes here
+			s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
+			s.SetTimeout(5 * time.Second)
+			err := s.ListenAndServe(":" + c.String("port"))
+			if err != nil {
+				logrus.Errorf("server: %s", err)
+				os.Exit(1)
+			}
 
-	//  Handle allowed filename suffixes
-	if len(os.Args) > 1 {
-		if os.Args[1] == "--help" {
-			fmt.Println(versionString + `
-
-Any given arguments that are not flags are interpreted as filename suffixes
-that are added to the list of allowed filename suffixe.
-Example, for serving only filenames ending with .txt:
-
-teaftp ".txt"
-`)
-			os.Exit(0)
-		} else if os.Args[1] == "--write" { // Undocumented feature
-			logrus.Infoln("Enabled write mode")
-			readOnly = false
-		}
-		allowedSuffixes = os.Args[1:]
-		//allowedPrefixes = os.Args[1:]
+			return nil
+		},
 	}
 
-	fmt.Println(versionString + "\nSimple, read-only TFTP server")
-
-	// use nil in place of handler to disable read or write operations
-	s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
-	s.SetTimeout(5 * time.Second)                        // optional
-	err := s.ListenAndServe(":" + env.Str("PORT", "69")) // blocks until s.Shutdown() is called
+	err := app.Run(os.Args)
 	if err != nil {
-		logrus.Errorf("server: %s", err)
-		os.Exit(1)
+		logrus.Fatal(err)
 	}
 }

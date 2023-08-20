@@ -6,19 +6,20 @@
 
 Simple, read-only TFTP server.
 
-### Features and limitations
+### Features and Limitations
 
-* TeaFTP may be suitable for dealing with hardware devices that read files over TFTP at boot (PXE).
-* Will happily read and share ANY file on the system, but does not have access to write to any file.
-  * Use the provided Docker container for a way to serve only a limited selection of files.
-  * Or use the list of allowed prefixes or suffixes, as described below.
+* Suitable for dealing with hardware devices that read files over TFTP at boot (PXE).
+* Security is provided by providing a list of whitelisted prefixes, suffixes and/or running the server from within a Docker container.
+* If not whitelisted filename prefixes or suffixes are provided, the server may share ANY file on the system, but not write to anything.
+  * Consider using the provided Docker container as a method to serve only a select group of files.
+  * Alternatively, utilize the list of allowed prefixes or suffixes for added security.
 * Every access is logged to stdout.
 
 ### Requirements
 
-    Go >= 1.11
+    Go 1.17 or later
 
-### Installation with Go 1.17 or later
+### Installation with Go 1.17 or Later
 
     go install github.com/xyproto/teaftp@latest
 
@@ -26,24 +27,24 @@ Simple, read-only TFTP server.
 
 #### Directly
 
-In the directory where you wish to share files:
+Navigate to the directory where you intend to share files:
 
-Either (if you use sudo):
+With sudo:
 
     sudo ./teaftp
 
-Or (on Linux), install it to /usr/bin and give the executable additional capabilities with `setcap`:
+On Linux, you can `teaftp` it to `/usr/bin` and grant additional capabilities using `setcap`:
 
     sudo install -Dm755 teaftp /usr/bin/teaftp
     sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
 
-Then run it:
-    
+Starting the server:
+
     teaftp
 
 #### Docker
 
-To build the Docker container, and also copy in the contents of the `static` directory to `/srv/tftp` within the container:
+To build the Docker container and copy the contents of the `static` directory to `/srv/tftp` inside the container:
 
     docker build . -t teaftp
 
@@ -55,22 +56,23 @@ To run TeaFTP with Docker and serve on port 9000 instead of port 69:
 
     docker run -ePORT=9000 --network=host -t teaftp
 
-#### Allowed suffixes
+#### Allowed Suffixes
 
-Any arguments given to TeaFTP are added to the list of allowed filename suffixes. If no arguments are given, the list of allowed suffixes is not in use.
+You can pass allowed filename suffixes as arguments to TeaFTP. When no arguments are given, there's no restriction on the file suffixes.
 
 Example:
 
     sudo ./teaftp ".txt"
 
-This only serves filenames ending with `.txt`.
+This configuration will only serve filenames that end with `.txt`.
 
 ### Dependencies
 
 * [pin/tftp](https://github.com/pin/tftp)
 * [sirupsen/logrus](https://github.com/sirupsen/logrus)
+* [urfave/cli](https://github.com/urfave/cli)
 
-### General info
+### General information
 
 * Version: 1.3.0
 * License: BSD-3
