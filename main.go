@@ -12,7 +12,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const versionString = "TeaFTP 1.3.0"
+const versionString = "TeaFTP 1.3.1"
 
 var (
 	allowedPrefixes []string
@@ -154,6 +154,11 @@ func main() {
 				Usage:   "Port number for the TFTP server",
 				EnvVars: []string{"PORT"}, // Backwards compatibility with original Docker example
 			},
+			&cli.BoolFlag{
+				Name:    "silent",
+				Aliases: []string{"s"},
+				Usage:   "Run server in silent mode, no startup message",
+			},
 		},
 		ArgsUsage: "[allowed suffixes]",
 		Action: func(c *cli.Context) error {
@@ -166,7 +171,9 @@ func main() {
 			s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
 			s.SetTimeout(5 * time.Second)
 			addr := ":" + c.String("port")
-			fmt.Println("Serving tea at localhost" + addr)
+			if !c.Bool("silent") {
+				fmt.Println("Serving tea at localhost" + addr)
+			}
 			err := s.ListenAndServe(addr)
 			if err != nil {
 				logrus.Errorf("server: %s", err)
