@@ -165,7 +165,9 @@ func main() {
 			// Your TFTP server setup and run code goes here
 			s := tftp.NewServer(readHandler, genWriteHandler(readOnly))
 			s.SetTimeout(5 * time.Second)
-			err := s.ListenAndServe(":" + c.String("port"))
+			addr := ":" + c.String("port")
+			fmt.Println("Serving tea at localhost" + addr)
+			err := s.ListenAndServe(addr)
 			if err != nil {
 				logrus.Errorf("server: %s", err)
 				os.Exit(1)
