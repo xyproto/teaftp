@@ -12,7 +12,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const versionString = "TeaFTP 1.3.1"
+const versionString = "TeaFTP 1.3.2"
 
 var (
 	allowedPrefixes []string
