@@ -33,7 +33,7 @@ With sudo:
 
     sudo ./teaftp
 
-On Linux, you can `teaftp` it to `/usr/bin` and grant additional capabilities using `setcap`:
+On Linux, you can place `teaftp` in for example `/usr/bin` and grant additional capabilities using `setcap`:
 
     sudo install -Dm755 teaftp /usr/bin/teaftp
     sudo setcap cap_net_bind_service=+ep /usr/bin/teaftp
