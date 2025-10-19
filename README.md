@@ -62,9 +62,9 @@ You can pass allowed filename suffixes as arguments to TeaFTP. When no arguments
 
 Example:
 
-    sudo ./teaftp ".txt"
+    sudo ./teaftp ".iso"
 
-This configuration will only serve filenames that end with `.txt`.
+This configuration will only serve filenames that end with `.iso`.
 
 ### Dependencies
 
