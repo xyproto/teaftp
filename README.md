@@ -11,7 +11,7 @@ Simple, read-only TFTP server.
 ### Features and Limitations
 
 * Suitable for dealing with hardware devices that read files over TFTP at boot (PXE).
-* Security is provided by providing a list of whitelisted prefixes, suffixes and/or running the server from within a container (not real security, but it helps limits which files can be accessed).
+* Security is provided by using a list of whitelisted prefixes, suffixes and/or running the server from within a container (not real security, but it helps limit which files can be accessed).
 * If whitelisted filename prefixes or suffixes are NOT provided, the server may share ANY file on the system (but not write to anything).
   * Consider using the provided Docker container as a method to serve only a select group of files.
   * Alternatively, provide a list of allowed prefixes or suffixes for added security.
