@@ -64,7 +64,7 @@ You can pass allowed filename suffixes as arguments to TeaFTP. When no arguments
 
 Example:
 
-    sudo ./teaftp ".iso"
+    sudo ./teaftp .iso
 
 This configuration will only serve filenames that ends with `.iso`.
 
