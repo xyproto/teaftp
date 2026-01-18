@@ -1,4 +1,4 @@
-FROM golang:1.18 as builder
+FROM golang:1 as builder
 LABEL maintainer="xyproto@archlinux.org"
 
 WORKDIR /app
