@@ -1,3 +1,4 @@
+// Package main is the main package for the TeaFTP server
 package main
 
 import (
@@ -12,16 +13,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const versionString = "TeaFTP 1.3.2"
+const versionString = "TeaFTP 1.3.3"
 
-var (
-	allowedPrefixes []string
-	allowedSuffixes []string
-)
+var allowedPrefixes, allowedSuffixes []string
 
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
-
 	remoteAddr := ""
 	if raddr, ok := rf.(tftp.OutgoingTransfer); ok {
 		r := raddr.RemoteAddr()
